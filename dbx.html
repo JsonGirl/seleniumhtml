@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selenium 自动化测试演示 - 五类表单元素</title>
+    <title>Selenium 自动化测试演示 - 五类表单元素（垂直排列）</title>
     <style>
         * {
             box-sizing: border-box;
@@ -48,15 +48,16 @@
             color: #1e4663;
             font-size: 1rem;
         }
+        /* 垂直排列单选和复选框 */
         .radio-group, .checkbox-group {
             display: flex;
-            gap: 24px;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 12px;
         }
         .radio-group div, .checkbox-group div {
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
         input[type="radio"], input[type="checkbox"] {
             width: 18px;
@@ -125,7 +126,7 @@
 <body>
 <div class="container">
     <h1>✨ Selenium 测试面板</h1>
-    <div class="sub">包含单选、多选、下拉框、日期、文本输入 – 所有控件均带稳定 id</div>
+    <div class="sub">单选、多选、下拉框、日期、文本输入 – 选项垂直排列，便于操作</div>
 
     <!-- 1. 单选按钮 -->
     <div class="form-group">
@@ -196,7 +197,7 @@
     </div>
     <footer>
         💡 所有控件均带有固定 id，方便 Selenium 定位。<br>
-        修改后点击按钮即可看到实时结果，也可直接通过自动化脚本获取。
+        单选、多选选项已调整为垂直排列，下拉框默认垂直展开。
     </footer>
 </div>
 
