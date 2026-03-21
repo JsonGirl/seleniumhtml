@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Selenium 自动化测试演示 - 五类表单元素（垂直排列）</title>
+    <title>Selenium 自动化测试</title>
     <style>
         * {
             box-sizing: border-box;
@@ -48,7 +48,6 @@
             color: #1e4663;
             font-size: 1rem;
         }
-        /* 垂直排列单选和复选框 */
         .radio-group, .checkbox-group {
             display: flex;
             flex-direction: column;
@@ -64,7 +63,7 @@
             height: 18px;
             cursor: pointer;
         }
-        select, input[type="date"], input[type="text"] {
+        select, input[type="date"], input[type="text"], input[type="file"] {
             width: 100%;
             padding: 10px 14px;
             border: 1px solid #ccd7e4;
@@ -73,10 +72,36 @@
             transition: 0.2s;
             background-color: #fff;
         }
+        input[type="file"] {
+            padding: 8px 14px;
+            cursor: pointer;
+        }
         select:focus, input:focus {
             outline: none;
             border-color: #3b82f6;
             box-shadow: 0 0 0 3px rgba(59,130,246,0.2);
+        }
+        .preview-area {
+            margin-top: 12px;
+            padding: 12px;
+            background: #f9fafb;
+            border-radius: 8px;
+            border: 1px dashed #cbd5e1;
+            text-align: center;
+            min-height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .preview-area img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+        }
+        .preview-placeholder {
+            color: #94a3b8;
+            font-size: 0.9rem;
         }
         button {
             background-color: #3b82f6;
@@ -110,11 +135,6 @@
             font-size: 1rem;
             color: #1e4663;
         }
-        hr {
-            margin: 20px 0;
-            border: none;
-            border-top: 1px solid #e2e8f0;
-        }
         footer {
             text-align: center;
             font-size: 0.75rem;
@@ -126,7 +146,7 @@
 <body>
 <div class="container">
     <h1>✨ Selenium 测试面板</h1>
-    <div class="sub">单选、多选、下拉框、日期、文本输入 – 选项垂直排列，便于操作</div>
+    <div class="sub">单选、多选、下拉框、日期、文本输入、文件上传（带图片预览）</div>
 
     <!-- 1. 单选按钮 -->
     <div class="form-group">
@@ -189,6 +209,15 @@
         <input type="text" id="text_input" placeholder="请输入任意文字..." value="Selenium 测试">
     </div>
 
+    <!-- 6. 文件上传 + 图片预览 -->
+    <div class="form-group">
+        <label>📎 文件上传 (File Upload) - 支持图片预览</label>
+        <input type="file" id="file_upload" accept="image/*">
+        <div class="preview-area" id="previewContainer">
+            <div class="preview-placeholder">📷 图片预览将显示在此处</div>
+        </div>
+    </div>
+
     <button id="showBtn">🔍 显示当前所有选择的值</button>
 
     <div class="result-box" id="resultArea">
@@ -197,11 +226,46 @@
     </div>
     <footer>
         💡 所有控件均带有固定 id，方便 Selenium 定位。<br>
-        单选、多选选项已调整为垂直排列，下拉框默认垂直展开。
+        选择图片后，下方区域会自动显示缩略图。支持常见图片格式（jpg/png/gif/webp等）。
     </footer>
 </div>
 
 <script>
+    // 获取文件上传控件和预览容器
+    const fileInput = document.getElementById('file_upload');
+    const previewContainer = document.getElementById('previewContainer');
+
+    // 监听文件选择变化
+    fileInput.addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            // 清空预览
+            previewContainer.innerHTML = '<div class="preview-placeholder">📷 图片预览将显示在此处</div>';
+            return;
+        }
+
+        // 检查是否为图片类型
+        if (!file.type.startsWith('image/')) {
+            previewContainer.innerHTML = '<div class="preview-placeholder">⚠️ 选择的文件不是图片，无法预览</div>';
+            return;
+        }
+
+        // 使用 FileReader 读取并显示图片
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = '预览图片';
+            // 清空容器并添加图片
+            previewContainer.innerHTML = '';
+            previewContainer.appendChild(img);
+        };
+        reader.onerror = function() {
+            previewContainer.innerHTML = '<div class="preview-placeholder">❌ 图片加载失败，请重试</div>';
+        };
+        reader.readAsDataURL(file);
+    });
+
     function getCurrentValues() {
         // 获取单选选中的值
         let radioValue = "";
@@ -228,12 +292,21 @@
         // 文本
         const textValue = document.getElementById("text_input").value;
 
+        // 文件上传：获取文件名
+        let fileNames = "";
+        if (fileInput.files.length > 0) {
+            fileNames = Array.from(fileInput.files).map(f => f.name).join(", ");
+        } else {
+            fileNames = "未选择文件";
+        }
+
         return {
             radio: radioValue || "未选择",
             checkbox: checkboxValues.length ? checkboxValues.join(", ") : "未选择",
             select: selectedCity || "未选择",
             date: dateValue || "未填写",
-            text: textValue || "未填写"
+            text: textValue || "未填写",
+            file: fileNames
         };
     }
 
@@ -245,7 +318,8 @@
             <strong>☑️ 多选：</strong> ${values.checkbox}<br>
             <strong>📋 下拉框：</strong> ${values.select}<br>
             <strong>📅 日期：</strong> ${values.date}<br>
-            <strong>✏️ 文本：</strong> ${values.text}
+            <strong>✏️ 文本：</strong> ${values.text}<br>
+            <strong>📎 上传：</strong> ${values.file}
         `;
     }
 
