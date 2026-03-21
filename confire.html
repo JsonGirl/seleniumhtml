@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>确认框测试</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-align: center;
+            width: 300px;
+        }
+        h1 {
+            margin-top: 0;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 20px 0;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>ConformTest</h1>
+    <input type="text" id="dataInput" value="确认框测试">
+    <button id="submitBtn">提交</button>
+    <div id="message" class="message"></div>
+</div>
+
+<script>
+    const inputField = document.getElementById('dataInput');
+    const submitBtn = document.getElementById('submitBtn');
+    const messageDiv = document.getElementById('message');
+
+    submitBtn.addEventListener('click', () => {
+        const currentValue = inputField.value;
+        // 弹出确认框
+        const userConfirmed = confirm(`是否保存数据：“${currentValue}”？`);
+
+        if (userConfirmed) {
+            // 用户点击“确定”：保存数据
+            // 这里模拟保存（例如存储到 localStorage，或发送到服务器）
+            // 这里简单显示保存成功消息，并可以保留数据
+            localStorage.setItem('savedData', currentValue); // 可选：保存到本地
+            messageDiv.textContent = '数据已保存！';
+            messageDiv.style.color = 'green';
+            // 可选：也可以让输入框保持原值不变
+        } else {
+            // 用户点击“取消”：清空输入框
+            inputField.value = '';
+            messageDiv.textContent = '已取消，输入框已清空。';
+            messageDiv.style.color = 'red';
+        }
+    });
+</script>
+</body>
+</html>
