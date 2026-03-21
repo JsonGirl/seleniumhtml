@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>alert弹框测试</title>
+    <title>alert弹框 测试</title>
     <style>
         * {
             margin: 0;
@@ -25,7 +25,7 @@
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
             padding: 40px 32px;
             width: 100%;
-            max-width: 440px;
+            max-width: 480px;
             backdrop-filter: blur(2px);
             transition: transform 0.2s;
         }
@@ -48,15 +48,14 @@
             padding-bottom: 12px;
         }
         .input-group {
-            margin-bottom: 24px;
+            margin-bottom: 32px;
         }
         label {
             display: block;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #374151;
-            font-size: 0.9rem;
-            letter-spacing: 0.3px;
+            font-size: 1rem;
         }
         input {
             width: 100%;
@@ -77,7 +76,7 @@
         .button-group {
             display: flex;
             gap: 16px;
-            margin-top: 32px;
+            margin-top: 8px;
         }
         button {
             flex: 1;
@@ -119,56 +118,39 @@
 </head>
 <body>
 <div class="card">
-    <h2>✨ 欢迎来到</h2>
-    <div class="sub">Selenium 自动化练习</div>
+    <h2>✨ alert 弹框测试</h2>
+    <div class="sub">Selenium 自动化练习 · 使用 alert 弹框</div>
 
     <div class="input-group">
-        <label>📛 昵称</label>
-        <input type="text" id="nickname" value="大貔貅喝啤酒" autocomplete="off">
-    </div>
-
-    <div class="input-group">
-        <label>📌 关注内容</label>
-        <input type="text" id="attention" value="学习selenium自动化测试" autocomplete="off">
+        <label>📝 输入内容</label>
+        <input type="text" id="mainInput" value="大貔貅喝啤酒学习selenium自动化测试" autocomplete="off">
     </div>
 
     <div class="button-group">
-        <button id="submitBtn">✅ </button>
-        <button id="cancelBtn">❌ </button>
+        <button id="submitBtn">提交</button>
+        <button id="cancelBtn">取消</button>
     </div>
     <div class="demo-note">
-        💡 点击「提交」：若两个输入框均无内容（含空白）则提示“请输入昵称和关注内容”；否则弹出拼接内容。<br>
-        「取消」：提示数据不保存并清空两个输入框。
+        💡 点击「提交」：alert 弹出输入框的当前内容。<br>
+        「取消」：alert 提示“数据将不保存”，并清空输入框。
     </div>
 </div>
 
 <script>
-    const nicknameInput = document.getElementById('nickname');
-    const attentionInput = document.getElementById('attention');
+    const inputEl = document.getElementById('mainInput');
     const submitBtn = document.getElementById('submitBtn');
     const cancelBtn = document.getElementById('cancelBtn');
 
-    // 提交按钮逻辑
+    // 提交：弹出输入框的内容
     submitBtn.addEventListener('click', () => {
-        // 获取值并去除首尾空格
-        const nickname = nicknameInput.value.trim();
-        const attention = attentionInput.value.trim();
-
-        // 如果两个输入框都为空（或只有空格）
-        if (nickname === '' && attention === '') {
-            alert('请输入昵称和关注内容');
-        } else {
-            // 正常拼接（保留原始输入内容，不强制trim显示）
-            const message = `${nicknameInput.value} · ${attentionInput.value}`;
-            alert(message);
-        }
+        const value = inputEl.value;
+        alert(value);
     });
 
-    // 取消按钮：弹出提示 + 清空两个输入框
+    // 取消：弹出提示并清空输入框
     cancelBtn.addEventListener('click', () => {
         alert('数据将不保存');
-        nicknameInput.value = '';
-        attentionInput.value = '';
+        inputEl.value = '';
     });
 </script>
 </body>
