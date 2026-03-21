@@ -277,7 +277,7 @@
 
     <footer>
         💡 所有控件均带有固定 id，方便 Selenium 定位。<br>
-        提交后显示成功页面，可查看已填内容或重新填写。
+        提交后显示成功页面，点击“再填一次”将在新窗口中打开表单页面。
     </footer>
 </div>
 
@@ -360,7 +360,7 @@
 
     // 重置表单所有控件（包括文件上传和预览）
     function resetForm() {
-        // 重置单选：默认都不选中（或者可设置一个默认值，这里都不选）
+        // 重置单选：默认都不选中
         const radios = document.getElementsByName("color");
         radios.forEach(radio => radio.checked = false);
 
@@ -388,18 +388,15 @@
         newFileInput.accept = 'image/*';
         newFileInput.style.cssText = oldFileInput.style.cssText;
         newFileInput.className = oldFileInput.className;
-        // 复制其他属性
         newFileInput.setAttribute('accept', 'image/*');
-        // 替换
         oldFileInput.parentNode.replaceChild(newFileInput, oldFileInput);
-        fileInput = newFileInput; // 更新全局引用
-        // 重新绑定 change 事件
+        fileInput = newFileInput;
         fileInput.addEventListener('change', handleFileChange);
 
         // 重置图片预览
         previewContainer.innerHTML = '<div class="preview-placeholder">📷 图片预览将显示在此处</div>';
 
-        // 同时更新显示结果框（可选）
+        // 更新显示结果框
         updateDisplay();
     }
 
@@ -432,7 +429,6 @@
     function showSuccessPage() {
         formArea.classList.add('hidden');
         successArea.classList.remove('hidden');
-        // 隐藏之前可能显示的查看内容容器
         viewDataContainer.classList.add('hidden');
     }
 
@@ -466,10 +462,9 @@
         viewDataContainer.classList.remove('hidden');
     }
 
-    // 再填一次：重置表单，回到表单页
+    // 再填一次：新窗口打开当前页面
     function fillAgain() {
-        resetForm();
-        showFormPage();
+        window.open(window.location.href, '_blank');
     }
 
     // ---------- 事件绑定 ----------
