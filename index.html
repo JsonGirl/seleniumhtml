@@ -25,6 +25,7 @@
             border-radius: 16px;
             box-shadow: 0 8px 20px rgba(0,0,0,0.1);
             padding: 24px 32px;
+            transition: all 0.2s;
         }
         h1 {
             font-size: 1.8rem;
@@ -130,10 +131,41 @@
             border-left: 5px solid #3b82f6;
             word-break: break-word;
         }
-        .result-box h3 {
-            margin: 0 0 8px 0;
-            font-size: 1rem;
-            color: #1e4663;
+        .success-page {
+            text-align: center;
+        }
+        .success-icon {
+            font-size: 48px;
+            margin: 20px 0;
+        }
+        .action-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 30px;
+        }
+        .action-buttons button {
+            margin-top: 0;
+            background-color: #28a745;
+        }
+        .action-buttons button:last-child {
+            background-color: #6c757d;
+        }
+        .action-buttons button:hover {
+            opacity: 0.9;
+            transform: none;
+        }
+        .hidden {
+            display: none;
+        }
+        .submitted-data {
+            background: #eef2ff;
+            padding: 16px;
+            border-radius: 12px;
+            text-align: left;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 0.9rem;
         }
         footer {
             text-align: center;
@@ -145,129 +177,131 @@
 </head>
 <body>
 <div class="container">
-    <h1>✨ Selenium 测试面板</h1>
-    <div class="sub">单选、多选、下拉框、日期、文本输入、文件上传（带图片预览）</div>
+    <!-- 表单区域 -->
+    <div id="formArea">
+        <h1>✨ Selenium 测试面板</h1>
+        <div class="sub">单选、多选、下拉框、日期、文本输入、文件上传（带图片预览）</div>
 
-    <!-- 1. 单选按钮 -->
-    <div class="form-group">
-        <label>📌 单选按钮 (Radio Button)</label>
-        <div class="radio-group">
-            <div>
-                <input type="radio" id="radio_red" name="color" value="红色">
-                <label for="radio_red">红色</label>
+        <!-- 1. 单选按钮 -->
+        <div class="form-group">
+            <label>📌 单选按钮 (Radio Button)</label>
+            <div class="radio-group">
+                <div>
+                    <input type="radio" id="radio_red" name="color" value="红色">
+                    <label for="radio_red">红色</label>
+                </div>
+                <div>
+                    <input type="radio" id="radio_green" name="color" value="绿色">
+                    <label for="radio_green">绿色</label>
+                </div>
+                <div>
+                    <input type="radio" id="radio_blue" name="color" value="蓝色">
+                    <label for="radio_blue">蓝色</label>
+                </div>
             </div>
-            <div>
-                <input type="radio" id="radio_green" name="color" value="绿色">
-                <label for="radio_green">绿色</label>
+        </div>
+
+        <!-- 2. 复选框 (多选) -->
+        <div class="form-group">
+            <label>✅ 复选框 (Checkbox)</label>
+            <div class="checkbox-group">
+                <div>
+                    <input type="checkbox" id="check_apple" value="苹果">
+                    <label for="check_apple">苹果</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="check_banana" value="香蕉">
+                    <label for="check_banana">香蕉</label>
+                </div>
+                <div>
+                    <input type="checkbox" id="check_orange" value="橙子">
+                    <label for="check_orange">橙子</label>
+                </div>
             </div>
-            <div>
-                <input type="radio" id="radio_blue" name="color" value="蓝色">
-                <label for="radio_blue">蓝色</label>
+        </div>
+
+        <!-- 3. 下拉框 (Select) -->
+        <div class="form-group">
+            <label>🔽 下拉选择框 (Select)</label>
+            <select id="select_city">
+                <option value="北京">北京</option>
+                <option value="上海">上海</option>
+                <option value="广州">广州</option>
+                <option value="深圳">深圳</option>
+            </select>
+        </div>
+
+        <!-- 4. 日期选择器 -->
+        <div class="form-group">
+            <label>📅 日期 (Date Picker)</label>
+            <input type="date" id="date_picker" value="2025-01-01">
+        </div>
+
+        <!-- 5. 文本输入框 -->
+        <div class="form-group">
+            <label>✏️ 文本输入框 (Text Input)</label>
+            <input type="text" id="text_input" placeholder="请输入任意文字..." value="Selenium 测试">
+        </div>
+
+        <!-- 6. 文件上传 + 图片预览 -->
+        <div class="form-group">
+            <label>📎 文件上传 (File Upload) - 支持图片预览</label>
+            <input type="file" id="file_upload" accept="image/*">
+            <div class="preview-area" id="previewContainer">
+                <div class="preview-placeholder">📷 图片预览将显示在此处</div>
             </div>
+        </div>
+
+        <!-- 原有的“显示当前值”按钮和提交按钮 -->
+        <button id="showBtn">🔍 显示当前所有选择的值</button>
+        <button id="submitBtn" style="background-color: #28a745; margin-top: 12px;">📤 提交表单</button>
+
+        <div class="result-box" id="resultArea">
+            <h3>📋 当前表单值：</h3>
+            <div id="resultContent">点击上方按钮查看</div>
         </div>
     </div>
 
-    <!-- 2. 复选框 (多选) -->
-    <div class="form-group">
-        <label>✅ 复选框 (Checkbox)</label>
-        <div class="checkbox-group">
-            <div>
-                <input type="checkbox" id="check_apple" value="苹果">
-                <label for="check_apple">苹果</label>
-            </div>
-            <div>
-                <input type="checkbox" id="check_banana" value="香蕉">
-                <label for="check_banana">香蕉</label>
-            </div>
-            <div>
-                <input type="checkbox" id="check_orange" value="橙子">
-                <label for="check_orange">橙子</label>
-            </div>
+    <!-- 成功页面区域（初始隐藏） -->
+    <div id="successArea" class="success-page hidden">
+        <div class="success-icon">✅</div>
+        <h2>数据提交成功！</h2>
+        <p>您的表单数据已成功提交。</p>
+        <div class="action-buttons">
+            <button id="viewDataBtn">📄 查看已填写内容</button>
+            <button id="fillAgainBtn">🔄 再填一次</button>
         </div>
+        <!-- 查看内容时动态显示在这里 -->
+        <div id="viewDataContainer" class="submitted-data hidden"></div>
     </div>
 
-    <!-- 3. 下拉框 (Select) -->
-    <div class="form-group">
-        <label>🔽 下拉选择框 (Select)</label>
-        <select id="select_city">
-            <option value="北京">北京</option>
-            <option value="上海">上海</option>
-            <option value="广州">广州</option>
-            <option value="深圳">深圳</option>
-        </select>
-    </div>
-
-    <!-- 4. 日期选择器 -->
-    <div class="form-group">
-        <label>📅 日期 (Date Picker)</label>
-        <input type="date" id="date_picker" value="2025-01-01">
-    </div>
-
-    <!-- 5. 文本输入框 -->
-    <div class="form-group">
-        <label>✏️ 文本输入框 (Text Input)</label>
-        <input type="text" id="text_input" placeholder="请输入任意文字..." value="Selenium 测试">
-    </div>
-
-    <!-- 6. 文件上传 + 图片预览 -->
-    <div class="form-group">
-        <label>📎 文件上传 (File Upload) - 支持图片预览</label>
-        <input type="file" id="file_upload" accept="image/*">
-        <div class="preview-area" id="previewContainer">
-            <div class="preview-placeholder">📷 图片预览将显示在此处</div>
-        </div>
-    </div>
-
-    <button id="showBtn">🔍 显示当前所有选择的值</button>
-
-    <div class="result-box" id="resultArea">
-        <h3>📋 当前表单值：</h3>
-        <div id="resultContent">点击上方按钮查看</div>
-    </div>
     <footer>
         💡 所有控件均带有固定 id，方便 Selenium 定位。<br>
-        选择图片后，下方区域会自动显示缩略图。支持常见图片格式（jpg/png/gif/webp等）。
+        提交后显示成功页面，可查看已填内容或重新填写。
     </footer>
 </div>
 
 <script>
-    // 获取文件上传控件和预览容器
-    const fileInput = document.getElementById('file_upload');
+    // ---------- DOM 元素 ----------
+    const formArea = document.getElementById('formArea');
+    const successArea = document.getElementById('successArea');
+    const showBtn = document.getElementById('showBtn');
+    const submitBtn = document.getElementById('submitBtn');
+    const viewDataBtn = document.getElementById('viewDataBtn');
+    const fillAgainBtn = document.getElementById('fillAgainBtn');
+    const viewDataContainer = document.getElementById('viewDataContainer');
+
+    // 文件上传相关元素
+    let fileInput = document.getElementById('file_upload');
     const previewContainer = document.getElementById('previewContainer');
 
-    // 监听文件选择变化
-    fileInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        if (!file) {
-            // 清空预览
-            previewContainer.innerHTML = '<div class="preview-placeholder">📷 图片预览将显示在此处</div>';
-            return;
-        }
+    // 存储最后一次提交的数据
+    let lastSubmittedData = null;
 
-        // 检查是否为图片类型
-        if (!file.type.startsWith('image/')) {
-            previewContainer.innerHTML = '<div class="preview-placeholder">⚠️ 选择的文件不是图片，无法预览</div>';
-            return;
-        }
-
-        // 使用 FileReader 读取并显示图片
-        const reader = new FileReader();
-        reader.onload = function(e) {
-            const img = document.createElement('img');
-            img.src = e.target.result;
-            img.alt = '预览图片';
-            // 清空容器并添加图片
-            previewContainer.innerHTML = '';
-            previewContainer.appendChild(img);
-        };
-        reader.onerror = function() {
-            previewContainer.innerHTML = '<div class="preview-placeholder">❌ 图片加载失败，请重试</div>';
-        };
-        reader.readAsDataURL(file);
-    });
-
-    function getCurrentValues() {
-        // 获取单选选中的值
+    // ---------- 辅助函数 ----------
+    // 获取当前表单所有值（返回对象）
+    function getCurrentFormValues() {
+        // 单选
         let radioValue = "";
         const radios = document.getElementsByName("color");
         for (let radio of radios) {
@@ -277,7 +311,7 @@
             }
         }
 
-        // 获取复选框选中的值
+        // 复选框
         let checkboxValues = [];
         const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
         checkboxes.forEach(cb => checkboxValues.push(cb.value));
@@ -292,7 +326,7 @@
         // 文本
         const textValue = document.getElementById("text_input").value;
 
-        // 文件上传：获取文件名
+        // 文件：只存文件名（实际无法存文件内容，仅展示名称）
         let fileNames = "";
         if (fileInput.files.length > 0) {
             fileNames = Array.from(fileInput.files).map(f => f.name).join(", ");
@@ -310,8 +344,9 @@
         };
     }
 
-    function updateResultDisplay() {
-        const values = getCurrentValues();
+    // 更新“显示当前值”的结果框
+    function updateDisplay() {
+        const values = getCurrentFormValues();
         const resultDiv = document.getElementById("resultContent");
         resultDiv.innerHTML = `
             <strong>🔘 单选：</strong> ${values.radio}<br>
@@ -323,12 +358,131 @@
         `;
     }
 
-    // 绑定按钮点击事件
-    const btn = document.getElementById("showBtn");
-    btn.addEventListener("click", updateResultDisplay);
+    // 重置表单所有控件（包括文件上传和预览）
+    function resetForm() {
+        // 重置单选：默认都不选中（或者可设置一个默认值，这里都不选）
+        const radios = document.getElementsByName("color");
+        radios.forEach(radio => radio.checked = false);
 
-    // 页面加载时显示一次默认值
-    updateResultDisplay();
+        // 重置复选框：全部取消勾选
+        const checkboxes = document.querySelectorAll("input[type='checkbox']");
+        checkboxes.forEach(cb => cb.checked = false);
+
+        // 重置下拉框：选择第一个选项
+        const selectEl = document.getElementById("select_city");
+        selectEl.selectedIndex = 0;
+
+        // 重置日期：设置为默认值 2025-01-01
+        const dateInput = document.getElementById("date_picker");
+        dateInput.value = "2025-01-01";
+
+        // 重置文本输入框
+        const textInput = document.getElementById("text_input");
+        textInput.value = "Selenium 测试";
+
+        // 重置文件上传：由于 input[type=file] 是只读的，需要替换元素来清空
+        const oldFileInput = fileInput;
+        const newFileInput = document.createElement('input');
+        newFileInput.type = 'file';
+        newFileInput.id = 'file_upload';
+        newFileInput.accept = 'image/*';
+        newFileInput.style.cssText = oldFileInput.style.cssText;
+        newFileInput.className = oldFileInput.className;
+        // 复制其他属性
+        newFileInput.setAttribute('accept', 'image/*');
+        // 替换
+        oldFileInput.parentNode.replaceChild(newFileInput, oldFileInput);
+        fileInput = newFileInput; // 更新全局引用
+        // 重新绑定 change 事件
+        fileInput.addEventListener('change', handleFileChange);
+
+        // 重置图片预览
+        previewContainer.innerHTML = '<div class="preview-placeholder">📷 图片预览将显示在此处</div>';
+
+        // 同时更新显示结果框（可选）
+        updateDisplay();
+    }
+
+    // 处理文件选择预览
+    function handleFileChange(event) {
+        const file = event.target.files[0];
+        if (!file) {
+            previewContainer.innerHTML = '<div class="preview-placeholder">📷 图片预览将显示在此处</div>';
+            return;
+        }
+        if (!file.type.startsWith('image/')) {
+            previewContainer.innerHTML = '<div class="preview-placeholder">⚠️ 选择的文件不是图片，无法预览</div>';
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.alt = '预览图片';
+            previewContainer.innerHTML = '';
+            previewContainer.appendChild(img);
+        };
+        reader.onerror = function() {
+            previewContainer.innerHTML = '<div class="preview-placeholder">❌ 图片加载失败，请重试</div>';
+        };
+        reader.readAsDataURL(file);
+    }
+
+    // 显示成功页面，隐藏表单
+    function showSuccessPage() {
+        formArea.classList.add('hidden');
+        successArea.classList.remove('hidden');
+        // 隐藏之前可能显示的查看内容容器
+        viewDataContainer.classList.add('hidden');
+    }
+
+    // 显示表单页面，隐藏成功页
+    function showFormPage() {
+        formArea.classList.remove('hidden');
+        successArea.classList.add('hidden');
+    }
+
+    // 提交动作：获取当前数据，存储，显示成功页
+    function submitForm() {
+        lastSubmittedData = getCurrentFormValues();
+        showSuccessPage();
+    }
+
+    // 查看已填写内容（在成功页内展示）
+    function viewSubmittedData() {
+        if (!lastSubmittedData) {
+            viewDataContainer.innerHTML = '<p>没有提交的数据。</p>';
+        } else {
+            const data = lastSubmittedData;
+            viewDataContainer.innerHTML = `
+                <strong>🔘 单选：</strong> ${data.radio}<br>
+                <strong>☑️ 多选：</strong> ${data.checkbox}<br>
+                <strong>📋 下拉框：</strong> ${data.select}<br>
+                <strong>📅 日期：</strong> ${data.date}<br>
+                <strong>✏️ 文本：</strong> ${data.text}<br>
+                <strong>📎 上传：</strong> ${data.file}
+            `;
+        }
+        viewDataContainer.classList.remove('hidden');
+    }
+
+    // 再填一次：重置表单，回到表单页
+    function fillAgain() {
+        resetForm();
+        showFormPage();
+    }
+
+    // ---------- 事件绑定 ----------
+    showBtn.addEventListener('click', updateDisplay);
+    submitBtn.addEventListener('click', submitForm);
+    viewDataBtn.addEventListener('click', viewSubmittedData);
+    fillAgainBtn.addEventListener('click', fillAgain);
+
+    // 文件上传事件监听（初始）
+    fileInput.addEventListener('change', handleFileChange);
+
+    // 页面加载时显示一次当前值
+    updateDisplay();
 </script>
 </body>
 </html>
