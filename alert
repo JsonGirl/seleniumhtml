@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>alert弹框测试</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 32px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px 32px;
+            width: 100%;
+            max-width: 440px;
+            backdrop-filter: blur(2px);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+        }
+        h2 {
+            text-align: center;
+            color: #1f2937;
+            font-weight: 700;
+            margin-bottom: 8px;
+            font-size: 1.8rem;
+        }
+        .sub {
+            text-align: center;
+            color: #6b7280;
+            margin-bottom: 32px;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 12px;
+        }
+        .input-group {
+            margin-bottom: 24px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #374151;
+            font-size: 0.9rem;
+            letter-spacing: 0.3px;
+        }
+        input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 28px;
+            background: #f9fafb;
+            transition: all 0.2s;
+            outline: none;
+            font-family: inherit;
+        }
+        input:focus {
+            border-color: #8b5cf6;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.2);
+        }
+        .button-group {
+            display: flex;
+            gap: 16px;
+            margin-top: 32px;
+        }
+        button {
+            flex: 1;
+            border: none;
+            padding: 12px 0;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 40px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #f3f4f6;
+            color: #1f2937;
+        }
+        button:first-child {
+            background: #8b5cf6;
+            color: white;
+            box-shadow: 0 4px 6px rgba(139, 92, 246, 0.3);
+        }
+        button:first-child:hover {
+            background: #7c3aed;
+            transform: translateY(-2px);
+        }
+        button:last-child:hover {
+            background: #e5e7eb;
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(1px);
+        }
+        .demo-note {
+            margin-top: 28px;
+            text-align: center;
+            font-size: 0.75rem;
+            color: #9ca3af;
+            border-top: 1px solid #e5e7eb;
+            padding-top: 16px;
+        }
+    </style>
+</head>
+<body>
+<div class="card">
+    <h2>✨ 欢迎登录</h2>
+    <div class="sub">Selenium 自动化练习</div>
+
+    <div class="input-group">
+        <label>📛 昵称</label>
+        <input type="text" id="nickname" value="大貔貅喝啤酒" autocomplete="off">
+    </div>
+
+    <div class="input-group">
+        <label>📌 关注内容</label>
+        <input type="text" id="attention" value="学习selenium自动化测试" autocomplete="off">
+    </div>
+
+    <div class="button-group">
+        <button id="submitBtn">✅ 提交</button>
+        <button id="cancelBtn">❌ 取消</button>
+    </div>
+    <div class="demo-note">
+        💡 点击「提交」：若两个输入框均无内容（含空白）则提示“请输入昵称和关注内容”；否则弹出拼接内容。<br>
+        「取消」：提示数据不保存并清空两个输入框。
+    </div>
+</div>
+
+<script>
+    const nicknameInput = document.getElementById('nickname');
+    const attentionInput = document.getElementById('attention');
+    const submitBtn = document.getElementById('submitBtn');
+    const cancelBtn = document.getElementById('cancelBtn');
+
+    // 提交按钮逻辑
+    submitBtn.addEventListener('click', () => {
+        // 获取值并去除首尾空格
+        const nickname = nicknameInput.value.trim();
+        const attention = attentionInput.value.trim();
+
+        // 如果两个输入框都为空（或只有空格）
+        if (nickname === '' && attention === '') {
+            alert('请输入昵称和关注内容');
+        } else {
+            // 正常拼接（保留原始输入内容，不强制trim显示）
+            const message = `${nicknameInput.value} · ${attentionInput.value}`;
+            alert(message);
+        }
+    });
+
+    // 取消按钮：弹出提示 + 清空两个输入框
+    cancelBtn.addEventListener('click', () => {
+        alert('数据将不保存');
+        nicknameInput.value = '';
+        attentionInput.value = '';
+    });
+</script>
+</body>
+</html>
