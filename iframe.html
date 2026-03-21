@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>带输入框的方形iframe示例</title>
+    <style>
+        /* 外层容器：先显示输入框，再显示iframe */
+        .outer-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* 输入框样式 */
+        .url-input {
+            width: 100%;
+            max-width: 1040px; /* 匹配两个iframe+间距的总宽度 */
+            padding: 12px 16px;
+            margin: 0 auto 20px; /* 底部间距，居中显示 */
+            display: block;
+            border: 2px solid #333;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* iframe容器：让两个iframe并排展示 */
+        .iframe-container {
+            display: flex;
+            gap: 20px;
+            padding: 0 20px;
+            justify-content: center;
+            flex-wrap: wrap; /* 适配更小屏幕 */
+        }
+
+        /* 核心：方形iframe样式 */
+        .square-iframe {
+            width: 500px;
+            height: 500px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            flex-shrink: 0; /* 防止iframe被压缩 */
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .iframe-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            .square-iframe {
+                width: 300px;
+                height: 300px;
+            }
+            .url-input {
+                max-width: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="outer-container">
+        <!-- 新增的输入框 -->
+        <input type="text" class="url-input" placeholder="请输入文字">
+
+        <!-- 原有iframe容器 -->
+        <div class="iframe-container">
+            <iframe class="square-iframe" 
+                    src="https://www.baidu.com" 
+                    title="百度首页"
+                    frameborder="0">
+                您的浏览器不支持iframe标签，请升级浏览器！
+            </iframe>
+
+            <iframe class="square-iframe" 
+                    src="https://blog.csdn.net/qq_46362865?type=blog" 
+                    title="CSDN首页"
+                    frameborder="0">
+                您的浏览器不支持iframe标签，请升级浏览器！
+            </iframe>
+        </div>
+    </div>
+</body>
+</html>
